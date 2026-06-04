@@ -30,8 +30,12 @@ def parse_airports(file):
     valid, skipped = [], 0
     with open(file, encoding="utf-8", newline="") as f:
         for line in csv.reader(f):
+            # TODO 1: Guard the field count, then skip and log why
             for values in line:
                 clean(values)
+            # TODO 2: Run types through try/except
+            # TODO 3: Check graph usability
+            # TODO 4: Append an Aiport(...) on success, else skipped += 1 and log reason
             pass
     print(f"airports: {len(valid)} valid, {skipped} skipped")
     return valid

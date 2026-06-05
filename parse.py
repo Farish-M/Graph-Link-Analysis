@@ -87,6 +87,14 @@ def parse_routes(file):
                 skipped += 1
                 print(f"skip - bad id: {e}")
                 continue
+            valid.append(Route(
+                airline=fields[0],
+                airline_id=airline_id,
+                source_airport=fields[2],
+                source_airport_id=source_id,
+                destination_airport=fields[4],
+                destination_airport_id=destination_id
+            ))
     print(f"routes: {len(valid)} valid, {skipped} skipped")
     return valid  
 

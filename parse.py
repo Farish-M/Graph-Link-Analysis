@@ -64,13 +64,26 @@ def parse_airports(file):
             ))
     print(f"airports: {len(valid)} valid, {skipped} skipped")
     return valid
+
+# TODO 5: Repeat parse_airports() but for routes
+def parse_routes(file):
+    valid, skipped = [], 0
+    with open(file, encoding="utf-8", newline="") as f:
+        for line in csv.reader(f):
+            if len(line) != EXPECTED_ROUTE_FIELDS:
+                skipped += 1
+                print(f"skip - expected {EXPECTED_ROUTE_FIELDS} fields, got {len(line)}")
+                continue
             
+    print(f"routes: {len(valid)} valid, {skipped} skipped")
+    return valid  
 
 def main():
     airport_data = "data/airports.dat"
     route_data = "data/routes.dat"
 
     airports = parse_airports(airport_data)
+    routes = parse_routes(route_data)
 
 if __name__ == "__main__":
     main()

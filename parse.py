@@ -1,25 +1,27 @@
-import pandas as pd
 import csv
 from dataclasses import dataclass
+
+EXPECTED_AIRPORT_FIELDS = 14
+EXPECTED_ROUTE_FIELDS = 9
 
 @dataclass
 class Airport:
     airport_id: int
     name: str
     city: str
-    IATA: str
-    ICAO: str
-    Latitude: float
-    Longitude: float
+    iata: str
+    icao: str | None
+    latitude: float
+    longitude: float
 
 @dataclass
 class Route:
     airline: str
-    airline_id: int
+    airline_id: int | None
     source_airport: str
-    source_airport_id: int
+    source_airport_id: int | None
     destination_airport: str
-    destination_airport_id: int
+    destination_airport_id: int | None
 
 def clean(value):
     """Normalise OpenFlights nulls: '\\N' and '' both mean None."""
@@ -31,23 +33,44 @@ def parse_airports(file):
     with open(file, encoding="utf-8", newline="") as f:
         for line in csv.reader(f):
             # TODO 1: Guard the field count, then skip and log why
-            for values in line:
-                clean(values)
+            if len(line) != EXPECTED_AIRPORT_FIELDS:
+                skipped += 1
+                print(f"skip - expected {EXPECTED_AIRPORT_FIELDS} fields, got {len(line)}")
+                continue
+            fields = [clean(values) for values in line]
             # TODO 2: Run types through try/except
+            try:
+                airport_id = int(fields[0])
+                latitude = float(fields[6])
+                longitude = float(fields[7])
+            except (ValueError, TypeError) as e:
+                skipped += 1
+                print(f"skip - bad number: {e}")
+                continue
             # TODO 3: Check graph usability
+            if fields[4] is None:
+                skipped += 1
+                print(f"skip - no IATA: {fields[1]}")
+                continue
             # TODO 4: Append an Aiport(...) on success, else skipped += 1 and log reason
-            pass
+            valid.append(Airport(
+                airport_id=airport_id,
+                name=fields[1],
+                city=fields[2],
+                iata=fields[4],
+                icao=fields[5],
+                latitude=latitude,
+                longitude=longitude
+            ))
     print(f"airports: {len(valid)} valid, {skipped} skipped")
     return valid
+            
 
 def main():
     airport_data = "data/airports.dat"
     route_data = "data/routes.dat"
 
-    parse_airports(airport_data)
-
-    airport_data = pd.read_csv(airport_data)
-    route_data = pd.read_csv(route_data)
+    airports = parse_airports(airport_data)
 
 if __name__ == "__main__":
     main()

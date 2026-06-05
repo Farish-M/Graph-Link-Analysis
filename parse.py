@@ -77,7 +77,15 @@ def parse_routes(file):
             fields = [clean(values) for values in line]
             if fields[2] is None or fields[4] is None:
                 skipped += 1
-                print(f"skip - missing airport code")
+                print(f"skip - missing airport code for airline {fields[0]}")
+                continue
+            try:
+                airline_id = int(fields[1]) if fields[1] is not None else None
+                source_id = int(fields[3]) if fields[3] is not None else None
+                destination_id = int(fields[5]) if fields[5] is not None else None
+            except (TypeError, ValueError) as e:
+                skipped += 1
+                print(f"skip - bad id: {e}")
                 continue
     print(f"routes: {len(valid)} valid, {skipped} skipped")
     return valid  

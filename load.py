@@ -34,6 +34,8 @@ def main():
             "FOR (a:Airport) REQUIRE a.iata IS UNIQUE",
             database_="neo4j",
         )
+        load_airports(driver, rows)
+        print(f"Loaded {len(rows)} airports")
 
 if __name__ == "__main__":
     main()

@@ -96,7 +96,7 @@ def parse_routes(file):
                 destination_airport_id=destination_id
             ))
     print(f"routes: {len(valid)} valid, {skipped} skipped")
-    return valid  
+    return valid
 
 def main():
     airport_data = "data/airports.dat"

@@ -16,10 +16,22 @@ def shortest_path(driver, source, destination):
     )
     return records[0]["result"] if records else None
 
+def top_hub(driver):
+    query = """
+    MATCH (s:Airport)
+    RETURN s.name AS Airport, COUNT { (s)-[:FLYING_TO]-() } as Connections
+    ORDER BY Connections DESC
+    LIMIT 10
+    """
+    records, _, _ = driver.execute_query(query)
+    for record in records:
+        print(record["Airport"], record["Connections"])
+
 def main():
     with GraphDatabase.driver(URI, auth=AUTH) as driver:
         driver.verify_connectivity()
         print(shortest_path(driver, "HGU", "PNP"))
+        top_hub(driver)
 
 if __name__ == "__main__":
     main()

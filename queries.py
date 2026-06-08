@@ -27,11 +27,21 @@ def top_hub(driver):
     for record in records:
         print(record["Airport"], record["Connections"])
 
+def two_hop_neighbour(driver, source):
+    query = """
+    MATCH (s:Airport {iata: $source})-[r:FLYING_TO*1..2]-(d:Airport)
+    WHERE d <> s
+    RETURN DISTINCT d.name as Reachable
+    """
+    records, _, _ = driver.execute_query(query, source=source, database_="neo4j")
+    return [record["Reachable"] for record in records]
+
 def main():
     with GraphDatabase.driver(URI, auth=AUTH) as driver:
         driver.verify_connectivity()
         print(shortest_path(driver, "HGU", "PNP"))
         top_hub(driver)
+        print(two_hop_neighbour(driver, "HGU"))
 
 if __name__ == "__main__":
     main()

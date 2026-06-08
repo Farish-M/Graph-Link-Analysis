@@ -37,11 +37,13 @@ def two_hop_neighbour(driver, source):
     return [record["Reachable"] for record in records]
 
 def main():
+    source = input("Source airport (IATA code): ").strip().upper()
+    destination = input("Destination airport (IATA code): ").strip().upper()
     with GraphDatabase.driver(URI, auth=AUTH) as driver:
         driver.verify_connectivity()
-        print(shortest_path(driver, "HGU", "PNP"))
+        print(shortest_path(driver, source, destination))
         top_hub(driver)
-        print(two_hop_neighbour(driver, "HGU"))
+        print(two_hop_neighbour(driver, source))
 
 if __name__ == "__main__":
     main()

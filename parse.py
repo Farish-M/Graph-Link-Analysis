@@ -102,8 +102,8 @@ def main():
     airport_data = "data/airports.dat"
     route_data = "data/routes.dat"
 
-    airports = parse_airports(airport_data)
-    routes = parse_routes(route_data)
+    parse_airports(airport_data)
+    parse_routes(route_data)
 
 if __name__ == "__main__":
     main()

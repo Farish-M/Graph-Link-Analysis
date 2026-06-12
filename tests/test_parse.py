@@ -38,7 +38,7 @@ class TestParseAirports:
     
     def test_missing_iata_is_skipped(self, airports_file):
         result = parse_airports(str(airports_file))
-        assert all(airport.airport_id!= 4 for airport in result)
+        assert all(airport.airport_id != 4 for airport in result)
     
     def test_null_icao_still_valid(self,airports_file):
         result = parse_airports(str(airports_file))
@@ -68,10 +68,22 @@ class TestParseRoutes:
         assert result[0] == expected
         assert result[1].source_airport_id is None
 
-    #def test_wrong_field_count_is_skipped(self, routes_file):
+    def test_wrong_field_count_is_skipped(self, routes_file):
+        result = parse_routes(str(routes_file))
+        assert all(route.source_airport_id != 2966 for route in result)
 
-    #def test_bad_id_is_skipped(self, routes_file):
+    def test_bad_id_is_skipped(self, routes_file):
+        result = parse_routes(str(routes_file))
+        assert all(route.source_airport != "CEK" for route in result)
 
-    #def test_null_id_still_valid(self, routes_file):
-
-    #def test_missing_airport_code_skipped(self, routes_file):
+    def test_null_id_still_valid(self, routes_file):
+        result = parse_routes(str(routes_file))
+        expected = Route(
+            airline="2B",
+            airline_id=410,
+            source_airport="ASF",
+            source_airport_id=None,
+            destination_airport="MRV",
+            destination_airport_id=2962
+        )
+        assert expected in result

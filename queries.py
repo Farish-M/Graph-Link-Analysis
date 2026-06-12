@@ -24,8 +24,7 @@ def top_hub(driver):
     LIMIT 10
     """
     records, _, _ = driver.execute_query(query)
-    for record in records:
-        print(record["Airport"], record["Connections"])
+    return [(r["Airport"], r["Connections"]) for r in records]
 
 def two_hop_neighbour(driver, source):
     query = """

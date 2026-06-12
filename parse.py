@@ -75,7 +75,7 @@ def parse_routes(file):
                 print(f"skip - expected {EXPECTED_ROUTE_FIELDS} fields, got {len(line)}")
                 continue
             fields = [clean(values) for values in line]
-            if fields[2] is None or fields[4] is None:
+            if fields[3] is None or fields[5] is None:
                 skipped += 1
                 print(f"skip - missing airport code for airline {fields[0]}")
                 continue

@@ -68,7 +68,6 @@ The OpenFlights files are a static historical snapshot of around 2014 as opposed
 ## Future Work and Limitations
 **Future Work**
 - Visualisation front-end using React library
-- Unit tests
 - SQL staging
 
 **Limitations**
